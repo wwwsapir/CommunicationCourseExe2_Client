@@ -4,6 +4,7 @@ using namespace std;
 #pragma comment(lib, "Ws2_32.lib")
 #include <winsock2.h> 
 #include <string.h>
+#include <windows.h>
 
 void SendTimeMessage(SOCKET connSocket, sockaddr_in server, char message[])
 {
@@ -98,7 +99,20 @@ void GetClientToServerDelayEstimation(SOCKET connSocket, sockaddr_in server)
 
 void MeasureRTT(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	int rttSum = 0;
+	int before;
+	int after;
+
+	for (int i = 0; i < 100; i++)
+	{
+		before = GetTickCount();
+		SendTimeMessage(connSocket, server, "Get the time in ticks");
+		ReceiveTimeMessage(connSocket, recvBuff);
+		after = GetTickCount();
+		rttSum += (after - before);
+	}
+	cout << "The measured RTT is: " << rttSum / 100. << endl;
 }
 
 void GetTimeWithoutDateOrSeconds(SOCKET connSocket, sockaddr_in server)
