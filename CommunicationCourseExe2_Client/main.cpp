@@ -8,6 +8,7 @@ using namespace std;
 
 #define TIME_PORT	27015
 #define EXIT	0
+#define INVALID_INPUT_STRING "The input is invalid. Please enter a number from 0 to 13.\n"
 
 void RunInputLoop(SOCKET connSocket, sockaddr_in server)
 {
@@ -30,9 +31,16 @@ void RunInputLoop(SOCKET connSocket, sockaddr_in server)
 		cout << "12. Get the time without date in a specific city." << endl;
 		cout << "13. Measure the time lap." << endl;
 		cin >> input;
-		if (input < 0 || input > 13)
+		if (cin.fail())
 		{
-			cout << "The input is invalid. Please enter a number from 0 to 13.";
+			// user didn't input a number
+			cin.clear(); // reset failbit
+			cin.ignore(); //skip bad input
+			cout << INVALID_INPUT_STRING;
+		}
+		else if (input < 0 || input > 13)
+		{
+			cout << INVALID_INPUT_STRING;
 		}
 		else
 		{

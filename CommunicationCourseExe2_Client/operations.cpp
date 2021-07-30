@@ -14,7 +14,7 @@ void SendMessage(SOCKET connSocket, sockaddr_in server, char message[])
 	char sendBuff[255];
 	char recvBuff[255];
 
-	strcpy(sendBuff, message);
+	strcpy_s(sendBuff, message);
 
 	// Asks the server what's the currnet time.
 	// The send function sends data on a connected socket.
@@ -48,17 +48,17 @@ void SendMessage(SOCKET connSocket, sockaddr_in server, char message[])
 
 void GetTime(SOCKET connSocket, sockaddr_in server)
 {
-	SendMessage(connSocket, server, "What's the time?");
+	SendMessage(connSocket, server, "Get the time");
 }
 
 void GetTimeWithoutDate(SOCKET connSocket, sockaddr_in server)
 {
-	SendMessage(connSocket, server, "What's the time without date?");
+	SendMessage(connSocket, server, "Get the time without date");
 }
 
 void GetTimeSinceEpoch(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	SendMessage(connSocket, server, "Get the time since epoch");
 }
 
 void GetClientToServerDelayEstimation(SOCKET connSocket, sockaddr_in server)
