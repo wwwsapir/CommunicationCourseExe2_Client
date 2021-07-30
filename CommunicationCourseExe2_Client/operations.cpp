@@ -5,12 +5,11 @@ using namespace std;
 #include <winsock2.h> 
 #include <string.h>
 
-void SendMessage(SOCKET connSocket, sockaddr_in server, char message[], char recvBuff[])
+void SendTimeMessage(SOCKET connSocket, sockaddr_in server, char message[])
 {
 	// Send and receive data.
 
 	int bytesSent = 0;
-	int bytesRecv = 0;
 	char sendBuff[255];
 
 	strcpy_s(sendBuff, message);
@@ -30,6 +29,11 @@ void SendMessage(SOCKET connSocket, sockaddr_in server, char message[], char rec
 		return;
 	}
 	cout << "Time Client: Sent: " << bytesSent << "/" << strlen(sendBuff) << " bytes of \"" << sendBuff << "\" message.\n";
+}
+
+void ReceiveTimeMessage(SOCKET connSocket, char recvBuff[])
+{
+	int bytesRecv = 0;
 
 	// Gets the server's answer using simple recieve (no need to hold the server's address).
 	bytesRecv = recv(connSocket, recvBuff, 255, 0);
@@ -48,34 +52,43 @@ void SendMessage(SOCKET connSocket, sockaddr_in server, char message[], char rec
 void GetTime(SOCKET connSocket, sockaddr_in server)
 {
 	char recvBuff[255];
-	SendMessage(connSocket, server, "Get the time", recvBuff);
+	SendTimeMessage(connSocket, server, "Get the time");
+	ReceiveTimeMessage(connSocket, recvBuff);
 	cout << "The time is: " << recvBuff << endl;
 }
 
 void GetTimeWithoutDate(SOCKET connSocket, sockaddr_in server)
 {
 	char recvBuff[255];
-	SendMessage(connSocket, server, "Get the time without date", recvBuff);
+	SendTimeMessage(connSocket, server, "Get the time without date");
+	ReceiveTimeMessage(connSocket, recvBuff);
 	cout << "The time is: " << recvBuff << endl;
 }
 
 void GetTimeSinceEpoch(SOCKET connSocket, sockaddr_in server)
 {
 	char recvBuff[255];
-	SendMessage(connSocket, server, "Get the time since epoch", recvBuff);
+	SendTimeMessage(connSocket, server, "Get the time since epoch");
+	ReceiveTimeMessage(connSocket, recvBuff);
 	cout << "The time since epoch is: " << recvBuff << endl;
 }
 
 void GetClientToServerDelayEstimation(SOCKET connSocket, sockaddr_in server)
 {
+	for (int i = 0; i < 100; i++)
+	{
+		SendTimeMessage(connSocket, server, "Get the time in ticks");
+	}
+
 	char recvBuff[255];
 	int delaySum = 0;
 	int currTime;
-	SendMessage(connSocket, server, "Get the time in ticks", recvBuff);
+
+	ReceiveTimeMessage(connSocket, recvBuff);
 	int lastTime = atoi(recvBuff);
 	for (int i = 0; i < 99; i++)
 	{
-		SendMessage(connSocket, server, "Get the time in ticks", recvBuff);
+		ReceiveTimeMessage(connSocket, recvBuff);
 		currTime = atoi(recvBuff);
 		delaySum += (currTime - lastTime);
 		lastTime = currTime;
