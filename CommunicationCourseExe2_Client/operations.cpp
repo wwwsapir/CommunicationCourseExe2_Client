@@ -5,14 +5,13 @@ using namespace std;
 #include <winsock2.h> 
 #include <string.h>
 
-void SendMessage(SOCKET connSocket, sockaddr_in server, char message[])
+void SendMessage(SOCKET connSocket, sockaddr_in server, char message[], char recvBuff[])
 {
 	// Send and receive data.
 
 	int bytesSent = 0;
 	int bytesRecv = 0;
 	char sendBuff[255];
-	char recvBuff[255];
 
 	strcpy_s(sendBuff, message);
 
@@ -48,22 +47,40 @@ void SendMessage(SOCKET connSocket, sockaddr_in server, char message[])
 
 void GetTime(SOCKET connSocket, sockaddr_in server)
 {
-	SendMessage(connSocket, server, "Get the time");
+	char recvBuff[255];
+	SendMessage(connSocket, server, "Get the time", recvBuff);
+	cout << "The time is: " << recvBuff << endl;
 }
 
 void GetTimeWithoutDate(SOCKET connSocket, sockaddr_in server)
 {
-	SendMessage(connSocket, server, "Get the time without date");
+	char recvBuff[255];
+	SendMessage(connSocket, server, "Get the time without date", recvBuff);
+	cout << "The time is: " << recvBuff << endl;
 }
 
 void GetTimeSinceEpoch(SOCKET connSocket, sockaddr_in server)
 {
-	SendMessage(connSocket, server, "Get the time since epoch");
+	char recvBuff[255];
+	SendMessage(connSocket, server, "Get the time since epoch", recvBuff);
+	cout << "The time since epoch is: " << recvBuff << endl;
 }
 
 void GetClientToServerDelayEstimation(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	int delaySum = 0;
+	int currTime;
+	SendMessage(connSocket, server, "Get the time in ticks", recvBuff);
+	int lastTime = atoi(recvBuff);
+	for (int i = 0; i < 99; i++)
+	{
+		SendMessage(connSocket, server, "Get the time in ticks", recvBuff);
+		currTime = atoi(recvBuff);
+		delaySum += (currTime - lastTime);
+		lastTime = currTime;
+	}
+	cout << "The client-server delay estimation is: " << delaySum / 100. << endl;
 }
 
 void MeasureRTT(SOCKET connSocket, sockaddr_in server)
