@@ -79,7 +79,7 @@ void GetTimeSinceEpoch(SOCKET connSocket, sockaddr_in server)
 
 	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
 	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
-	cout << "The time since epoch is: " << recvBuff << endl;
+	cout << "The time in seconds since epoch is: " << recvBuff << endl;
 }
 
 void GetClientToServerDelayEstimation(SOCKET connSocket, sockaddr_in server)
@@ -127,17 +127,32 @@ void MeasureRTT(SOCKET connSocket, sockaddr_in server)
 
 void GetTimeWithoutDateOrSeconds(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Get the time without date or seconds";
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	cout << "The time is: " << recvBuff << endl;
 }
 
 void GetYear(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Get the year";
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	cout << "The year is: " << recvBuff << endl;
 }
 
 void GetMonthAndDay(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Get the month and day";
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	cout << "The month and day are: " << recvBuff << endl;
 }
 
 void GetSecondsSinceBeginingOfMonth(SOCKET connSocket, sockaddr_in server)
