@@ -223,5 +223,10 @@ void GetTimeWithoutDateInCity(SOCKET connSocket, sockaddr_in server)
 
 void MeasureTimeLap(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Measure Time Lap";
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	cout << recvBuff << endl;
 }
