@@ -167,7 +167,12 @@ void GetSecondsSinceBeginingOfMonth(SOCKET connSocket, sockaddr_in server)
 
 void GetWeekOfYear(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Get the week of year";
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	cout << "The week of year is: " << recvBuff << endl;
 }
 
 void GetDaylightSavings(SOCKET connSocket, sockaddr_in server)
