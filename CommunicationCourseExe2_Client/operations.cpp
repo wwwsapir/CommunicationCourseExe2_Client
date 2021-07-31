@@ -9,7 +9,7 @@ using namespace std;
 #define PRINT_LOGS true
 #define NO_LOGS false
 
-void SendTimeMessage(SOCKET connSocket, sockaddr_in server, char readySendBuff[], bool printLogs)
+void sendTimeMessage(SOCKET connSocket, sockaddr_in server, char readySendBuff[], bool printLogs)
 {
 	// Send and receive data.
 
@@ -33,7 +33,7 @@ void SendTimeMessage(SOCKET connSocket, sockaddr_in server, char readySendBuff[]
 		cout << "Time Client: Sent: " << bytesSent << "/" << strlen(readySendBuff) << " bytes of \"" << readySendBuff << "\" message.\n";
 }
 
-void ReceiveTimeMessage(SOCKET connSocket, char recvBuff[], bool printLogs)
+void receiveTimeMessage(SOCKET connSocket, char recvBuff[], bool printLogs)
 {
 	int bytesRecv = 0;
 
@@ -57,8 +57,8 @@ void GetTime(SOCKET connSocket, sockaddr_in server)
 	char recvBuff[255];
 	char sendBuff[255] = "Get the time";
 
-	SendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
-	ReceiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
 	cout << "The time is: " << recvBuff << endl;
 }
 
@@ -67,8 +67,8 @@ void GetTimeWithoutDate(SOCKET connSocket, sockaddr_in server)
 	char recvBuff[255];
 	char sendBuff[255] = "Get the time without date";
 
-	SendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
-	ReceiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
 	cout << "The time is: " << recvBuff << endl;
 }
 
@@ -77,8 +77,8 @@ void GetTimeSinceEpoch(SOCKET connSocket, sockaddr_in server)
 	char recvBuff[255];
 	char sendBuff[255] = "Get the time since epoch";
 
-	SendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
-	ReceiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
 	cout << "The time since epoch is: " << recvBuff << endl;
 }
 
@@ -87,18 +87,18 @@ void GetClientToServerDelayEstimation(SOCKET connSocket, sockaddr_in server)
 	char sendBuff[255] = "Get the time in ticks";
 	for (int i = 0; i < 100; i++)
 	{
-		SendTimeMessage(connSocket, server, sendBuff, NO_LOGS);
+		sendTimeMessage(connSocket, server, sendBuff, NO_LOGS);
 	}
 
 	char recvBuff[255];
 	int delaySum = 0;
 	int currTime;
 
-	ReceiveTimeMessage(connSocket, recvBuff, NO_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, NO_LOGS);
 	int lastTime = atoi(recvBuff);
 	for (int i = 0; i < 99; i++)
 	{
-		ReceiveTimeMessage(connSocket, recvBuff, NO_LOGS);
+		receiveTimeMessage(connSocket, recvBuff, NO_LOGS);
 		currTime = atoi(recvBuff);
 		delaySum += (currTime - lastTime);
 		lastTime = currTime;
@@ -117,8 +117,8 @@ void MeasureRTT(SOCKET connSocket, sockaddr_in server)
 	for (int i = 0; i < 100; i++)
 	{
 		before = GetTickCount();
-		SendTimeMessage(connSocket, server, sendBuff, NO_LOGS);
-		ReceiveTimeMessage(connSocket, recvBuff, NO_LOGS);
+		sendTimeMessage(connSocket, server, sendBuff, NO_LOGS);
+		receiveTimeMessage(connSocket, recvBuff, NO_LOGS);
 		after = GetTickCount();
 		rttSum += (after - before);
 	}
