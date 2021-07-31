@@ -177,7 +177,12 @@ void GetWeekOfYear(SOCKET connSocket, sockaddr_in server)
 
 void GetDaylightSavings(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Get the daylight savings status";
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	cout << "The daylight savings status is " << recvBuff << endl;
 }
 
 void GetTimeWithoutDateInCity(SOCKET connSocket, sockaddr_in server)
