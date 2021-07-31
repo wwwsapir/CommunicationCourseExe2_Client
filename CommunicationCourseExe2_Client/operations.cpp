@@ -8,6 +8,7 @@ using namespace std;
 
 #define PRINT_LOGS true
 #define NO_LOGS false
+#define IS_SUPPORTED_POSITION	8
 
 void sendTimeMessage(SOCKET connSocket, sockaddr_in server, char readySendBuff[], bool printLogs)
 {
@@ -187,7 +188,37 @@ void GetDaylightSavings(SOCKET connSocket, sockaddr_in server)
 
 void GetTimeWithoutDateInCity(SOCKET connSocket, sockaddr_in server)
 {
-	cout << "Not Implemented!";
+	char recvBuff[255];
+	char sendBuff[255] = "Get the time in city";
+
+	char cityBuff[100];
+	cout << "Please type the city name:\n";
+	cin.get();
+	cin.getline(cityBuff, sizeof(cityBuff));
+
+	// Turn input city to lowercase letters
+	for (int i = 0; cityBuff[i]; i++) {
+		cityBuff[i] = tolower(cityBuff[i]);
+	}
+	
+	// Add the city as a second string in the message
+	int lenOfMessage = strlen("Get the time in city");
+	strcpy_s(sendBuff + lenOfMessage, 255 - lenOfMessage, cityBuff);
+
+	sendTimeMessage(connSocket, server, sendBuff, PRINT_LOGS);
+
+	receiveTimeMessage(connSocket, recvBuff, PRINT_LOGS);
+	if (recvBuff[IS_SUPPORTED_POSITION] == '1')
+	{
+		recvBuff[IS_SUPPORTED_POSITION] = '\0';
+		cout << "The time in " << cityBuff << " is: " << recvBuff << endl;
+
+	}
+	else
+	{
+		recvBuff[IS_SUPPORTED_POSITION] = '\0';
+		cout << "The city is not supported! The UTC time is: " << recvBuff << endl;
+	}
 }
 
 void MeasureTimeLap(SOCKET connSocket, sockaddr_in server)
